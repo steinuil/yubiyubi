@@ -12,7 +12,7 @@ class VtuberHandler
   end
 
   def handle msg
-    return unless msg.command == "PRIVMSG" && msg.params[1].strip == '!vtuber'
+    return unless msg.command == "PRIVMSG" && msg.params[1].strip == "'chuuba"
     if File.mtime(@file) != @last_mtime
       reload_list
     end
