@@ -24,10 +24,11 @@ module IRC
     end
 
     def connect!
-      @conn = OpenSSL::SSL::SSLSocket
-        .new(TCPSocket.new(@config.server, @config.port))
-        .connect
+      sock = TCPSocket.new(@config.server, @config.port)
+      sock.sync = true
+      @conn = OpenSSL::SSL::SSLSocket.new(sock).connect
       @conn.sync_close = true
+      @conn.sync = true
 
       send! Message::new("USER", [
           @config.username || @config.nick,
@@ -57,7 +58,6 @@ module IRC
     def send! msg
       puts "< #{msg.to_s}"
       @conn.puts msg.to_s
-      @conn.flush
     end
 
     def login!
