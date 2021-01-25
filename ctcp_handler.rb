@@ -30,11 +30,11 @@ class CtcpHandler
     when "PING"
       "PING #{msg}"
     when "SOURCE"
-      "SOURCE https://github.com/steinuil/PonkoBot"
+      "SOURCE https://github.com/steinuil/yubiyubi"
     when "TIME"
       "TIME #{Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")}"
     when "VERSION"
-      "VERSION PonkoBot 0.1"
+      "VERSION yubiyubi 1.0"
     end
   end
 end
