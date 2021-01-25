@@ -1,0 +1,8 @@
+irc/
+RubyIRC/
+Gemfile
+*.yml
+*_handler.rb
+!ctcp_handler.rb
+bot.rb
+.bundle/
