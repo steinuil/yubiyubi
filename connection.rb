@@ -18,8 +18,6 @@ module IRC
   class Connection
     def initialize config, handlers
       @config = config
-      @ready = false
-      @quit = false
       @handlers = handlers
     end
 
@@ -46,38 +44,47 @@ module IRC
         quit!
       end
 
-      until @quit do
-        handle @conn.gets
+      loop do
+        resp = @conn.gets
+        break unless resp
+        handle resp
       end
 
       @conn.close unless @conn.closed?
+      @ping_thread.kill if @ping_thread
     rescue => e
       STDERR.puts e.inspect
     end
 
     def send! msg
-      puts "< #{msg.to_s}"
-      @conn.puts msg.to_s
+      puts "< #{Time.now.to_s} #{msg.to_s}"
+      @conn.syswrite(msg.to_s + "\r\n")
     end
 
     def login!
       send! Message::new("JOIN", [@config.channels.join(',')])
+
+      @ping_thread = Thread.new do
+        until @conn.closed?
+          # TODO close the connection if the server hasn't responded
+          send! Message::new("PING", [Time.now.to_i.to_s])
+          sleep 120
+        end
+      end
     end
 
     def quit!
       send! Message::new("QUIT", [@config.quit_message].compact)
-      @quit = true
     end
 
     def handle msg
-      puts "> #{msg}"
+      puts "> #{Time.now.to_s} #{msg}"
       msg = Message.parse msg
 
       case msg.command
       when "PING"
         send! Message::new("PONG", msg.params)
       when "376", "422"
-        @ready = true
         login!
       end
 
@@ -88,10 +95,5 @@ module IRC
         STDERR.puts e
       end
     end
-
-    #def handle_ctcp msg
-    #  msg = msg[1..].sub("\001$", '')
-    #  cmd, params = msg.split ' ', 2
-    #end
   end
 end
