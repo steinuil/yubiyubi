@@ -57,6 +57,7 @@ module IRC
     def send! msg
       puts "< #{msg.to_s}"
       @conn.puts msg.to_s
+      @conn.flush
     end
 
     def login!
