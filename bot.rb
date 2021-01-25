@@ -1,7 +1,8 @@
 require 'yaml'
-require_relative 'connection'
+require_relative 'lib/irc'
 require_relative 'ctcp_handler'
 require_relative 'vtuber_handler'
+require_relative 'monke_handler'
 
 config = YAML.safe_load(File.read(ARGV[0]))
 
@@ -14,7 +15,8 @@ conn = IRC::Connection.new(
     quit_message: config['quit_message']
   ), [
     CtcpHandler.new,
-    VtuberHandler.new(config['vtubers_path'])
+    VtuberHandler.new(config['vtubers_path']),
+    MonkeHandler.new(config['monke_path'])
   ]
 )
 conn.connect!

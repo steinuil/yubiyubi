@@ -1,5 +1,5 @@
 require 'yaml'
-require_relative 'message'
+require_relative 'lib/irc'
 
 class VtuberHandler
   def initialize file
@@ -19,13 +19,13 @@ class VtuberHandler
 
     vtuber = @list.sample
 
-    IRC::Message.new("PRIVMSG", [
+    IRC::Protocol.privmsg(
       msg.params[0],
       if vtuber["agency"]
         "#{msg.prefix.nick}, your vtuber is #{vtuber["name"]} (#{vtuber["agency"]})"
       else
         "#{msg.prefix.nick}, your vtuber is #{vtuber["name"]}"
       end
-    ])
+    )
   end
 end

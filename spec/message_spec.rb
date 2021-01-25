@@ -1,5 +1,5 @@
+require_relative 'helper'
 require 'minitest/autorun'
-require_relative 'message'
 
 describe 'IRC::Message.parse' do
   it 'parses simple messages' do

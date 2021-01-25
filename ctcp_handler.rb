@@ -1,11 +1,9 @@
-require_relative 'message'
+require_relative 'lib/irc'
 
 class CtcpHandler
-  DELIM = "\001"
-
   def is_ctcp msg
     msg.command == "PRIVMSG" &&
-      msg.params[1][0] == DELIM &&
+      msg.params[1][0] == IRC::Protocol::CTCP::DELIM &&
       msg.prefix.is_a?(IRC::Message::Nickname)
   end
 
@@ -13,12 +11,12 @@ class CtcpHandler
     return unless is_ctcp msg
 
     m = msg.params[1][1..]
-    m = m[0..-2] if m.end_with? DELIM
+    m = m[0..-2] if m.end_with? IRC::Protocol::CTCP::DELIM
 
     command, rest = m.split ' ', 2
     resp = handle_ctcp command, rest
     if resp
-      IRC::Message.new("NOTICE", [msg.prefix.nick, DELIM + resp + DELIM])
+      IRC::Protocol::CTCP.respond(msg.prefix.nick, resp)
     end
   end
 
@@ -34,7 +32,7 @@ class CtcpHandler
     when "TIME"
       "TIME #{Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")}"
     when "VERSION"
-      "VERSION yubiyubi 1.0"
+      "VERSION yubiyubi #{IRC::VERSION}"
     end
   end
 end
