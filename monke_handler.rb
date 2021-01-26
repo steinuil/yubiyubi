@@ -3,6 +3,7 @@ require_relative 'lib/irc'
 class MonkeHandler
   def initialize file
     @file = file
+    reload_list
   end
 
   def reload_list

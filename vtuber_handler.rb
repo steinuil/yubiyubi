@@ -4,6 +4,7 @@ require_relative 'lib/irc'
 class VtuberHandler
   def initialize file
     @file = file
+    reload_list
   end
 
   def reload_list
