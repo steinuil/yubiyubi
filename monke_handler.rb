@@ -6,8 +6,7 @@ class MonkeHandler
   end
 
   def reload_list
-    @list = File.readlines @file, chomp: true
-    p @list
+    @list = File.readlines @file, chomp: true, encoding: "UTF-8"
     @last_mtime = File.mtime(@file)
   end
 
