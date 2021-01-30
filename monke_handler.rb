@@ -11,8 +11,12 @@ class MonkeHandler
     @last_mtime = File.mtime(@file)
   end
 
+  def should_respond? msg
+    msg.command == "PRIVMSG" && msg.params[1].strip == "'monke"
+  end
+
   def handle msg
-    return unless msg.command == "PRIVMSG" && msg.params[1].strip == "'monke"
+    return unless should_respond? msg
     if File.mtime(@file) != @last_mtime
       reload_list
     end

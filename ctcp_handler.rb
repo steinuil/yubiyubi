@@ -1,14 +1,14 @@
 require_relative 'lib/irc'
 
 class CtcpHandler
-  def is_ctcp msg
+  def is_ctcp? msg
     msg.command == "PRIVMSG" &&
       msg.params[1][0] == IRC::Protocol::CTCP::DELIM &&
       msg.prefix.is_a?(IRC::Message::Nickname)
   end
 
   def handle msg
-    return unless is_ctcp msg
+    return unless is_ctcp? msg
 
     m = msg.params[1][1..]
     m = m[0..-2] if m.end_with? IRC::Protocol::CTCP::DELIM

@@ -16,7 +16,8 @@ conn = IRC::Connection.new(
   ), [
     CtcpHandler.new,
     VtuberHandler.new(config['vtubers_path']),
-    MonkeHandler.new(config['monke_path'])
+    MonkeHandler.new(config['monke_path']),
+    WaifuHandler.new
   ]
 )
 conn.connect!
