@@ -3,6 +3,7 @@ require_relative 'lib/irc'
 require_relative 'ctcp_handler'
 require_relative 'vtuber_handler'
 require_relative 'monke_handler'
+require_relative 'waifu_handler'
 
 config = YAML.safe_load(File.read(ARGV[0]))
 
